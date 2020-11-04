@@ -45,17 +45,22 @@ class ProfileController extends Controller
       $this->validate($request, Profile::$rules);
       // Profile Modelからデータを取得する
       $profile = Profile::find($request->id);
+      if(empty($profile)){
+            abort(404);
+        }
       // 送信されてきたフォームデータを格納する
       $profile_form = $request->all();
+      
       unset($profile_form['_token']);
+      unset($profile_form['remove']);
       // 該当するデータを上書きして保存する
       $profile->fill($profile_form)->save();
       
        // 以下を追記
-        $profileHistory = new ProfileHistory;
-        $profileHistory->profile_id = $profile->id;
-        $profileHistory->edited_at = Carbon::now();
-        $profileHistory->save();
+        $profile_history = new ProfileHistory;
+        $profile_history->profile_id = $profile->id;
+        $profile_history->edited_at = Carbon::now();
+        $profile_history->save();
         
         return redirect('admin/profile/edit');
         

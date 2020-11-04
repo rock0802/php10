@@ -17,7 +17,6 @@ class CreateHistoriesTable extends Migration
             $table->increments('id');
             $table->integer('news_id');
             $table->string('edited_at');
-
             $table->timestamps();
         });
     }
